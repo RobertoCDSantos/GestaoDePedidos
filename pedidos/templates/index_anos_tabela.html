@@ -1,0 +1,16 @@
+{% extends 'bulma_table_details_anos.html' %}
+
+{% block details_content %}
+
+<table>
+    <tbody style="table-layout: fixed;">
+        {% for l in row.record.linha_set.all %}
+            <tr>
+                <td style="width:25%">{{l.anoinicio}}</td>
+                <td style="width:25%">{{l.anofim}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock details_content %}

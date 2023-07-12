@@ -1,0 +1,103 @@
+{% extends 'app.html' %}
+{% load django_tables2 %}
+{% load static %}
+
+{% block title %}- Consultar Utilizadores
+{% endblock title %}
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+            <script>
+            $(document).ready(function() {
+                setTimeout(function() {
+                    $('#mensagem').fadeOut('fast');
+                }, 5000); // Tempo de exibição em milissegundos
+            });
+            </script>
+            {% if mensagem %}
+            <div id="mensagem">
+                <div class="mensagem" style="text-align:center; background-color:{{ colorBack }}; color:{{ color }}; padding:20px; display:block;">
+                    <h2>{{ mensagem }}</h2>
+                </div>
+                <br>
+            </div>
+            {% endif %}
+    <div class="columns">
+
+        <div class="column is-3">
+
+            <div class="menu">
+                <div class="menu-label">
+                    Filtros Pedidos de Horario
+                </div>
+                <form action="{% url 'pedidosHorario:index' %}" method="GET">
+                    <ul class="menu-list">
+                        <li>
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    <input class="input" name="pesquisa"
+                                           {% if name %}value="{{name}}"{% else %}value="{{ filter.form.nome.value|default_if_none:'' }}"{% endif %} type="text"
+                                           placeholder="Informação" >
+                                    <span class="icon is-left">
+                                    <i class="mdi mdi-magnify mdi-24px"></i>
+                                </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label>Tipos:<br>
+                                    <br>
+                                    <input type="checkbox" name="opcao" value="Titulo" {% if 'Titulo' in opcao %}checked{% endif %} > Titulo <br>
+                                    <input type="checkbox" name="opcao" value="Descricao" {% if 'Descricao' in opcao %}checked{% endif %} > Descrição <br>
+                                    <input type="checkbox" name="opcao" value="ID" {% if 'ID' in opcao %}checked{% endif %} > ID <br>
+                                </label>
+                            </div>
+                            <div class="field">
+                                <label for="id_estado">Estado:</label><br>
+                                <select name="id_estado" id="id_estado" class="button is-info">
+                                    <option value="todos" >Todos</option>
+                                    <option value="espera" {% if 'espera' in id_estado %}selected{% endif %}>Espera</option>
+                                    <option value="analise" {% if 'analise' in id_estado %}selected{% endif %}>Análise</option>
+                                    <option value="validado" {% if 'validado' in id_estado %}selected{% endif %}>Validado</option>
+                                    <option value="recusado" {% if 'recusado' in id_estado %}selected{% endif %}>Recusado</option>
+                                </select>
+                            </div>
+                        </li>
+                        <br>
+                    </ul>
+                    <div class="field is-grouped">
+                        <p class="control is-expanded">
+                            <input class="button is-light is-fullwidth" type="reset"
+                                   onclick="event.preventDefault(); window.location='{% url 'pedidosHorario:pedido_horario' %}';"
+                                   value="Limpar" >
+                        </p>
+                        <p class="control is-expanded">
+                            <button class="button is-primary is-fullwidth" type="submit">
+                            <span class="icon">
+                                <i class="mdi mdi-magnify"></i>
+                            </span>
+                                <span>Pesquisar</span>
+                            </button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="column">
+            <nav aria-label="breadcrumbs" class="breadcrumb">
+                <ul>
+                    <li><a href="{% url 'pedidos:app' %}">Início</a></li>
+                    <li class="is-active"><a href="">Pedidos de Horario</a>
+                    </li>
+                </ul>
+            </nav>
+            <a href="{% url 'pedidosHorario:criar_pedido_horario' %}">
+                <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
+                        class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Criar Pedidos de Horario</span>
+                </button>
+            </a>
+            {% render_table table %}
+
+        </div>
+    </div>
+{% endblock content %}
+

@@ -1,0 +1,31 @@
+{% extends 'app.html' %}
+{% block content %}
+
+{% if mensagem %}
+<div style="text-align:center; background-color:{{ colorBack }}; color:{{ color }}; padding:20px;">
+    <h2>{{ mensagem }}</h2>
+</div>
+<br>
+{% endif %}
+<!-- upload_excel.html -->
+<form 
+    style=" position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column; 
+            align-items: center;
+          " 
+    method="post" 
+    enctype="multipart/form-data"
+>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div style="margin-top: 20px;">
+        <p><button type="submit" style="background-color:cornflowerblue;" class="button">Submit</button></p>
+    </div>
+</form>
+{% endblock content %}

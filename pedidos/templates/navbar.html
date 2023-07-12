@@ -1,0 +1,117 @@
+{% load static %}
+
+<nav id="main-navbar" class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+      <a class="navbar-item logo" href="{% url 'pedidos:app' %}">
+        <img src="{% static '/img/logo.png' %}" alt="Gestão Pedidos">
+      </a>
+
+      <a role="button" class="navbar-burger burger" onclick="onclick_burger(event)" data-target="navbarBasicExample">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+      </a>
+  </div>
+
+  <div class="navbar-menu">
+    <div class="navbar-start">
+
+        <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">Pedidos</a>
+
+            <div class="navbar-dropdown">
+                  <a href="{% url 'pedidos:pedidos' %}" class="navbar-item">Pedidos</a>
+                  <a href="{% url 'pedidosHorario:pedido_horario' %}" class="navbar-item">Pedidos de Horário</a>
+                  <a href="{% url 'pedidosSala:pedido_sala' %}" class="navbar-item">Pedidos de Sala</a>
+                  <a href="{% url 'pedidosUC:pedido_uc' %}" class="navbar-item">Pedidos de Unidade Curricular</a>
+                  <a href="{% url 'pedidosOutros:pedido_outros' %}" class="navbar-item">Pedidos Outros</a>
+            </div>
+      </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">Importar</a>
+
+          <div class="navbar-dropdown">
+                <a href="{% url 'pedidos:import_dsd' %}" class="navbar-item">Importar DSD</a>
+                <a href="{% url 'pedidos:import_sala' %}" class="navbar-item">Importar Salas</a>
+                <a href="{% url 'pedidos:importar_ruc' %}" class="navbar-item">Importar RUC</a>
+                <a href="{% url 'pedidos:upload-docente' %}" class="navbar-item">Importar Docentes</a>
+
+          </div>
+        </div>
+
+        {% if user.is_authenticated %}
+              {% if user.is_funcionario %}
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">Estatísticas</a>
+
+          <div class="navbar-dropdown">
+                  <a href="{% url 'pedidos:estatisticas1' %}" class="navbar-item">Estatisticas de pedidos processados</a>
+                  <a href="{% url 'pedidos:estatisticas2' %}" class="navbar-item">Estatisticas de média de tempo de processamento de um tipo de pedido</a>
+                  <a href="{% url 'pedidos:estatisticas3' %}" class="navbar-item">Estatisticas de número de pedidos processados de um tipo de pedido, por si</a>
+          </div>
+        </div>
+        {% endif %}
+            {% endif %}
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">Definições</a>
+          
+          <div class="navbar-dropdown">
+                <a href="{% url 'pedidos:criar-ano-letivo' %}" class="navbar-item">Criar ano letivo</a>
+                <a href="{% url 'pedidos:listar-ano-letivo' %}" class="navbar-item">Listar anos letivos</a>
+                <a href="{% url 'pedidos:criar-semestre' %}" class="navbar-item">Criar semestre</a>
+                <a href="{% url 'pedidos:criar-disciplina' %}" class="navbar-item">Criar disciplina</a>
+
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="navbar-end">
+    {% if user.is_authenticated %}
+          <div class="navbar-item">Olá {{ user.get_username }}</div>
+          <div class="navbar-item"><a href="{% url 'users:logout' %}?next={{ request.path }}">Logout</a></div>
+          {% else %}
+          <div class="navbar-item"><a href="{% url 'users:login' %}?next={{ request.path }}">Login</a></div>
+          {% endif %}
+
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">Registar</a>
+            <div class="navbar-dropdown">
+              <a href="{% url 'users:register-docente' %}?next={{ request.path }}">Docente</a>
+              <a href="{% url 'users:register-funcionario' %}?next={{ request.path }}">Funcionario</a>
+            </div>
+          </div>
+
+  </div>
+
+</nav>
+
+
+{% block scripts %}
+<script>
+
+</script>
+
+<script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+
+<script>
+  $('#dropdown_definicoes').click(function (e) {
+    $('#mensagens-dropdown').removeClass('is-active');
+  })
+
+  $('#mensagens-dropdown').click(function (e) {
+    $('#dropdown_definicoes').removeClass('is-active');
+  })
+
+  function onclick_burger(e) {
+    $('#main-navbar > .navbar-menu').toggleClass('is-active');
+    $('#dropdown_definicoes').toggleClass('is-right');
+    $('#dropdown_definicoes').toggleClass('is-left');
+    $('#mensagens-dropdown').toggleClass('is-right');
+    $('#mensagens-dropdown').toggleClass('is-left');
+  };
+</script>
+
+{% endblock scripts %}

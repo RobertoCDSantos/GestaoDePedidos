@@ -1,0 +1,87 @@
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+
+
+{% extends 'app.html' %}
+{% load django_tables2 %}
+{% load static %}
+
+{% block title %}- Consultar Utilizadores
+{% endblock title %}
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+            <script>
+            $(document).ready(function() {
+                setTimeout(function() {
+                    $('#mensagem').fadeOut('fast');
+                }, 5000); // Tempo de exibição em milissegundos
+            });
+            </script>
+            {% if mensagem %}
+            <div id="mensagem">
+                <div class="mensagem" style="text-align:center; background-color:{{ colorBack }}; color:{{ color }}; padding:20px; display:block;">
+                    <h2>{{ mensagem }}</h2>
+                </div>
+                <br>
+            </div>
+            {% endif %}
+    <div class="columns">
+        <div class="column">
+            <nav aria-label="breadcrumbs" class="breadcrumb">
+                <ul>
+                    <li><a href="{% url 'pedidos:app' %}">Início</a></li>
+                    <li class="is-active"><a href="">Estatisticas</a>
+                    </li>
+                </ul>
+            </nav>
+            <div>
+                <div>
+                    <h4 style="text-align:center;"><b style="font-size: 30px;">Estatisticas de média de tempo de processamento de um tipo de pedido</b></h4>
+                    <hr>
+                <form method="GET" action="{% url 'pedidos:media_pedidos_processados' %}">
+
+                    <div class="control is-clearfix">
+                        <label for="id_data_inicio">Data Início:</label>
+                        <input name="data_inicio" id="data_inicio" class="input"
+                               for="{{ form.dataalvo.value|default_if_none:"" }}" type="date">
+                        <label for="id_data_fim">Data Fim:</label>
+                        <input name="data_fim" id="data_fim" class="input"
+                               for="{{ form.dataalvo.value|default_if_none:"" }}" type="date">
+                        <div style="display: inline">
+                            <br>
+                            <br>
+                            <label for="estado-select">Tipo de Pedido:</label>
+                            <select class="button is-outlined" name="estado" id="estado-select" onchange="showSaveButton(this)">
+                                <option value="todos" selected> Todos </option>
+                                <option value="espera"> Espera </option>
+                                <option value="analise"> Análise</option>
+                                <option value="cancelado"> Cancelado</option>
+                                <option value="validado"> Validado</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <button class="button is-outlined" type="submit">Mostrar</button>
+                 </form>
+                {% if media_tempo_validacao %}
+                    <b style="font-size: 30px;">{{ media_tempo_validacao }}</b>
+                {% else %}
+                    <p style="font-size: 30px;">Sem informação por enquanto.</p>
+                {% endif %}
+                    <br>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+<script>
+  $(function() {
+    $("#data_inicio").datepicker();
+    $("#data_fim").datepicker();
+  });
+</script>

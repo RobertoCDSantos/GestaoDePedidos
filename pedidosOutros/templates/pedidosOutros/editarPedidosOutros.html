@@ -1,0 +1,186 @@
+{% extends 'app.html' %}
+
+{% block title %}- Formulario{% endblock title %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Dynamic Inline Formsets with Vue.js CDN</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+  <script>
+            $(document).ready(function() {
+                setTimeout(function() {
+                    $('#mensagem').fadeOut('fast');
+                }, 5000); // Tempo de exibição em milissegundos
+            });
+            </script>
+            {% if mensagem %}
+            <div id="mensagem">
+                <div class="mensagem" style="text-align:center; background-color:{{ colorBack }}; color:{{ color }}; padding:20px; display:block;">
+                    <h2>{{ mensagem }}</h2>
+                </div>
+                <br>
+            </div>
+            {% endif %}
+      <div id="app">
+          <form method="post">
+
+            <!-- Pedido -->
+            <div style="padding: 1rem 2vw 0px;">
+              <hr>
+              <div class="columns">
+                  <div class="column">
+                      <div class="field">
+                          <label class="label">Título do pedido</label>
+                          <div class="control is-clearfix">
+                              <input name="titulo" id="titulo" class="input"
+                              for="{{ form.titulo.value|default_if_none:'' }}" type="text" maxlength="255" value="{{titulo}}">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Descricao do pedido</label>
+                        <div class="control is-clearfix">
+                            <input name="descricao" id="descricao" class="input"
+                            for="{{ form.descricao.value|default_if_none:'' }}" type="text" maxlength="255" value="{{descricao}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+              <div class="columns">
+                  <div class="column">
+                      <div class="field">
+                          <label class="label">Data alvo</label>
+                          <div class="control is-clearfix">
+                              <input name="dataalvo" id="dataalvo" class="input"
+                               for="{{ form.dataalvo.value|default_if_none:"" }}" type="date">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <hr>
+            </div>
+
+
+
+            {{ linha_formset.management_form }}
+            {% for form in linha_formset.forms %}
+                      {% for hidden in form.hidden_fields %}
+                          {{ hidden }}
+                      {% endfor %}
+                      <div>
+                        <label for="id_linhaoutros_set-{{ forloop.counter0 }}-descricao">Descrição:</label>
+                        <input name="linhaoutros_set-{{ forloop.counter0 }}-descricao" id="id_linhaoutros_set-{{ forloop.counter0 }}-descricao" class="input"
+                              type="text" maxlength="255" value="{{form.descricao.value}}"> 
+                              
+                        <label for="id_linhaoutros_set-{{ forloop.counter0 }}-DELETE">Apagar:</label>
+                        <input name="linhaoutros_set-{{forloop.counter0}}-DELETE" id="id_linhaoutros_set-{{forloop.counter0}}-DELETE"
+                              type="checkbox"> 
+
+                              <input name="linhaoutros_set-{{forloop.counter0}}-id" id="id_linhaoutros_set-{{forloop.counter0}}-id"
+                              type="hidden" value="{{form.id.value}}"> 
+                              <input name="linhaoutros_set-{{forloop.counter0}}-pedidoID" id="id_linhaoutros_set-{{forloop.counter0}}-pedidoID"
+                              type="hidden" value="{{pedidoID}}"> 
+                      </div>
+                      
+            {% endfor %}
+              {% csrf_token %}
+              <input type="hidden"
+                           v-bind:name="'linhaoutros_set-TOTAL_FORMS'"
+                           v-bind:id="'id_linhaoutros_set-TOTAL_FORMS'"
+                           v-model=linhas.length>
+              <input type="hidden"
+                           v-bind:name="'linhaoutros_set-INITIAL_FORMS'"
+                           v-bind:id="'id_linhaoutros_set-INITIAL_FORMS'"
+                           v-model=start>
+
+            <div v-for="(linha, index) in linhas.slice(start_items)" :key="linha.id">
+                <label :for="'id_linhaoutros_set-' + (index+start_items) + '-descricao'">Descrição:</label>
+                <input class="input"type="text" :id="'id_linhaoutros_set-' + (index+start_items) + '-descricao'" :name="'linhaoutros_set-' + (index+start_items) + '-descricao'" v-model="linha.descricao">
+
+              <button type="button" @click="removeLinha(index)" class="button is-outlined">Remove</button>
+            </div>
+            
+
+            <button type="button" @click="addLinha" class="button is-outlined">Add Linha</button>
+
+            <!-- buttons -->
+            <div style="margin-top:2%;text-align:center;position:center;">
+              <button type="button" value="Voltar" class="button is-outlined" style="margin-right:5%"
+                      onclick="voltar()">Voltar
+              </button>
+              <button type="submit" onCLick="reload()"class="button is-success is-outlined" name="Submit">
+                  <span>Confirmar</span>
+              </button>
+          </div>
+          <!-- buttons -->
+          </form>
+        </div>
+
+
+
+
+
+
+        <script>
+          new Vue({
+            el: '#app',
+            data() {
+              return {
+                linhas: [],
+                start_items: 0
+              }
+            },
+            computed: {
+              start: {
+                  get () {
+                      return this.start_items
+                  }
+              }
+            },
+            methods: {
+              addLinha() {
+                console.log(this.linhas)
+                this.linhas.push({
+                  id: this.linhas.length + 1,
+                  titulo: '',
+                  descricao: ''
+                });
+              },
+              removeLinha(index) {
+                this.linhas.splice(index, 1);
+              },
+              },
+              mounted() {
+                this.start_items = {{inicial|safe}};
+                for (let i = 0; i < this.start_items; i++) {
+                  this.addLinha();
+                }
+              },
+            },
+          );
+        </script>
+
+  </body>
+  </html>
+
+  {% endblock content %}
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function voltar() {
+            location.href = "/pedidoOutros"
+        }
+         function reload() {
+            window.location.reload();
+        }
+    </script>
+
+
+}
+{% endblock scripts %}

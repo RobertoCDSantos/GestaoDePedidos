@@ -1,0 +1,25 @@
+
+
+{% extends 'app.html' %}
+{% load django_tables2 %}
+{% load static %}
+
+{% block title %}- Consultar Utilizadores
+{% endblock title %}
+
+{% block content %}
+    <div class="columns">
+        <div class="column">
+            <nav aria-label="breadcrumbs" class="breadcrumb">
+                <ul>
+                    <li><a href="{% url 'pedidosUC:pedido_uc' %}">Início</a></li>
+                    <li class="is-active"><a href="">Pedidos de Disciplina</a>
+                    </li>
+                </ul>
+            </nav>
+            <div>
+                {{mensagem}}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

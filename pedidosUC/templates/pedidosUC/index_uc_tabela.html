@@ -1,0 +1,42 @@
+{% extends 'pedidosUC/bulma_table_details.html' %}
+
+{% block details_content %}
+
+<table style="
+    width: 100%;
+    table-layout: fixed;
+">
+    <tbody style="table-layout: fixed;">
+        {% for l in row.record.linha_set.all %}
+            <tr>
+                <td 
+                style="width:15%; max-width:100px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;"
+                >
+                    <b>Titulo:</b> {{l.titulo}}
+                </td>
+                
+                <td 
+                style="width:15%; max-width:100px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;"
+                >
+                    <b>Descrição:</b> {{l.descricao}}
+                </td>
+
+                <td style="width:15%; max-width:100px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;"
+                >
+                    <b>Unidade Curricular:</b> {{l.uc.nome}}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock details_content %}

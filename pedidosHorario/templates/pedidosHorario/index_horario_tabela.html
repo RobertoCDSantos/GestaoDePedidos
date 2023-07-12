@@ -1,0 +1,16 @@
+{% extends 'pedidosHorario/bulma_table_details.html' %}
+
+{% block details_content %}
+
+<table>
+    <tbody style="table-layout: fixed;">
+        {% for l in row.record.linhahorario_set.all %}
+            <tr>
+                <td style="width:25%">{{l.titulo}}</td>
+                <td style="width:25%">{{l.descricao}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock details_content %}

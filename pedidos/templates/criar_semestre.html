@@ -1,0 +1,77 @@
+{% extends 'app.html' %}
+
+{% block title %}- Formulario{% endblock title %}
+
+{% block content %}
+
+    <div style="padding: 3rem 2vw 1rem;">
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <!-- inside form -->
+            <div style="padding: 1rem 2vw 0px;">
+                <hr>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Data de Início</label>
+                            <div class="control is-clearfix">
+                                <input name="inicio_data" id="inicio_data" class="input"
+                                for="{{ form.inicio_data.value|default_if_none:"" }}" type="date">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Data de Fim</label>
+                            <div class="control is-clearfix">
+                                <input name="fim_data" id="fim_data" class="input" 
+                                 for="{{ form.fim_data.value|default_if_none:"" }}" type="date">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Número de horas de serviço</label>
+                            <div class="control is-clearfix">
+                                <input name="nr_horas_service" id="nr_horas_service" class="input" 
+                                 for="{{ form.nr_horas_service.value|default_if_none:"" }}" type="text" maxlength="255">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <!-- inside form -->
+
+            <!-- buttons -->
+            <div style="margin-top:2%;text-align:center;position:center;">
+                <button type="button" value="Voltar" class="button is-outlined" style="margin-right:5%"
+                        onclick="voltar()">Voltar
+                </button>
+                <button type="submit" class="button is-success is-outlined" name="Submit">
+                    <span>Confirmar</span>
+                </button>
+            </div>
+            <!-- buttons -->
+        </div>
+    </form>
+
+    </div>
+
+{% endblock content %}
+
+
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function voltar() {
+            location.href = "/pedidos"
+        }
+    </script>
+
+
+{% endblock scripts %}

@@ -1,0 +1,255 @@
+
+{% extends 'app.html' %}
+
+{% block title %}- Formulario{% endblock title %}
+
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dynamic Inline Formsets with Vue.js CDN</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- CSS do Bootstrap -->
+
+  </head>
+  <body>
+      <div id="app">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+            <script>
+            $(document).ready(function() {
+                setTimeout(function() {
+                    $('#mensagem').fadeOut('fast');
+                }, 5000); // Tempo de exibição em milissegundos
+            });
+            </script>
+            {% if mensagem %}
+            <div id="mensagem">
+                <div class="mensagem" style="text-align:center; background-color:{{ colorBack }}; color:{{ color }}; padding:20px; display:block;">
+                    <h2>{{ mensagem }}</h2>
+                </div>
+                <br>
+            </div>
+            {% endif %}
+          <form method="post">
+            <!-- Pedido -->
+            <div style="padding: 1rem 2vw 0px;">
+              <hr>
+              <div class="columns">
+                  <div class="column">
+                      <div class="field">
+                          <label class="label">Título do pedido</label>
+                          <div class="control is-clearfix">
+                              <input name="titulo" id="titulo" class="input" value="{{ pedido_form.titulo|default_if_none:'' }}"
+                                for="{{ form.titulo.value|default_if_none:'' }}" type="text" maxlength="255">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Descricao do pedido</label>
+                        <div class="control is-clearfix">
+                            <input name="descricao" id="descricao" class="input" value="{{pedido_form.descricao|default_if_none:''}}"
+                            for="{{ form.descricao.value|default_if_none:'' }}" type="text" maxlength="255">
+                        </div>
+                    </div>
+                </div>
+            </div>
+              <div class="columns">
+                  <div class="column">
+                      <div class="field">
+                          <label class="label">Data alvo</label>
+                          <div class="control is-clearfix">
+                              <input name="dataalvo" id="dataalvo" class="input" value="{{pedido_form.dataalvo|date:'Y-m-d'|default_if_none:''}}"
+                               for="{{ form.dataalvo.value|default_if_none:"" }}" type="date">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <hr>
+            </div>
+
+
+
+            <div style="">{{ linha_formset.as_p }}</div>
+              {% csrf_token %}
+              <input type="hidden"
+                           v-bind:name="'linhahorario_set-TOTAL_FORMS'"
+                           v-bind:id="'id_linhahorario_set-TOTAL_FORMS'"
+                           v-model=this.linhas.length>
+              <input type="hidden"
+                           v-bind:name="'linhahorario_set-INITIAL_FORMS'"
+                           v-bind:id="'id_linhahorario_set-INITIAL_FORMS'"
+                           v-model=this.start>
+
+            <div v-for="(linha, index) in linhas.slice(start_items)" :key="linha.id">
+                <div style="display: flex; flex-wrap: wrap;justify-content: center;gap: 5%">
+                    <div style="flex-basis: 25%;">
+                        <label style="display: block; margin-bottom: 10px;" :for="'id_linhahorario_set-' + (index+start_items) + '-tipodepedido'">Tipo de Pedido:</label>
+                        <select style="display: block; width: 100%;" class="input dropdown-toggle" role="button" :id="'id_linhahorario_set-' + (index+start_items) + '-tipodepedido'" :name="'linhahorario_set-' + (index+start_items) + '-tipodepedido'" v-model="linha.tipodepedido">
+                            <option style="display: none;" value="default" disabled>Selecionar Opção</option>
+                            <option value="Criar">Criar</option>
+                            <option value="Editar">Editar</option>
+                            <option value="Cancelar">Remover</option>
+                        </select>
+                    </div>
+
+                    <div style="flex-basis: 25%;">
+                        <label style="display: block; margin-bottom: 10px;" :for="'id_linhahorario_set-' + (index+start_items) + '-diadasemana'">Dia da semana:</label>
+                        <select v-model="linha.diadasemana" class="input dropdown-toggle" role="button" style="display: block; width: 100%;" :id="'id_linhahorario_set-' + (index+start_items) + '-diadasemana'" :name="'linhahorario_set-' + (index+start_items) + '-diadasemana'" v-model="linha.diadasemana">
+                            <option style="display: none;" value="default" >Selecionar Opção</option>
+                            <option value="Segunda-Feira">Segunda-Feira</option>
+                            <option value="Terça-Feira">Terça-Feira</option>
+                            <option value="Quarta-Feira">Quarta-Feira</option>
+                            <option value="Quinta-Feira">Quinta-Feira</option>
+                            <option value="Sexta-Feira">Sexta-Feira</option>
+                            <option value="Sabado">Sabado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-wrap: wrap;justify-content: center;gap: 5%">
+                    <div style="flex-basis: 25%;">
+                        <label style="margin-bottom: 10px;" :for="'id_linhahorario_set-' + (index+start_items) + '-horainicio'">Hora Inicio: </label>
+                        <input style="margin-bottom: 10px;" class="input" type="time" :id="'id_linhahorario_set-' + (index+start_items) + '-horainicio'" :name="'linhahorario_set-' + (index+start_items) + '-horainicio'" v-model="linha.horainicio">
+                    </div>
+                    <div style="flex-basis: 25%;">
+                        <label style="margin-bottom: 10px;" :for="'id_linhahorario_set-' + (index+start_items) + '-horafim'"> Hora Fim:</label>
+                        <input style="margin-bottom: 10px;" class="input" type="time" :id="'id_linhahorario_set-' + (index+start_items) + '-horafim'" :name="'linhahorario_set-' + (index+start_items) + '-horafim'" v-model="linha.horafim">
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-wrap: wrap;justify-content: center;gap: 5%">
+                    <div style="flex-basis: 25%;">
+                        <label style="margin-bottom: 10px;" :for="'id_linhahorario_set-' + (index+start_items) + '-datainicio'">Data Inicio: </label>
+                        <input style="margin-bottom: 10px;" class="input" type="date" :id="'id_linhahorario_set-' + (index+start_items) + '-datainicio'" :name="'linhahorario_set-' + (index+start_items) + '-datainicio'" v-model="linha.datainicio">
+                    </div>
+                    <div style="flex-basis: 25%;">
+                        <label style="margin-bottom: 10px;" :for="'id_linhahorario_set-' + (index+start_items) + '-datafim'"> Data Fim:</label>
+                        <input style="margin-bottom: 10px;" class="input" type="date" :id="'id_linhahorario_set-' + (index+start_items) + '-datafim'" :name="'linhahorario_set-' + (index+start_items) + '-datafim'" v-model="linha.datafim">
+                    </div>
+                </div>
+                <div v-if="linha.tipodepedido === 'Editar'">
+                <div style="display: flex; flex-wrap: wrap;justify-content: center;gap: 5%">
+                    <div style="flex-basis: 25%;">
+                        <label style="margin-bottom: 10px;" :for="'id_linhahorario_set-' + (index+start_items) + '-novahorainicio'"> Nova Hora Inicio: </label>
+                        <input style="margin-bottom: 10px;" class="input" type="time" :id="'id_linhahorario_set-' + (index+start_items) + '-novahorainicio'" :name="'linhahorario_set-' + (index+start_items) + '-novahorainicio'" v-model="linha.novahorainicio">
+                    </div>
+                    <div style="flex-basis: 25%;">
+                        <label style="margin-bottom: 10px;" :for="'id_linhahorario_set-' + (index+start_items) + '-novahorafim'"> Nova Hora Fim:</label>
+                        <input style="margin-bottom: 10px;" class="input" type="time" :id="'id_linhahorario_set-' + (index+start_items) + '-novahorafim'" :name="'linhahorario_set-' + (index+start_items) + '-novahorafim'" v-model="linha.novahorafim">
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-wrap: wrap;justify-content: center;gap: 5%">
+                    <div style="flex-basis: 25%;">
+                        <label style="margin-bottom: 10px;" :for="'id_linhahorario_set-' + (index+start_items) + '-novadatainicio'">Nova Data Inicio: </label>
+                        <input style="margin-bottom: 10px;" class="input" type="date" :id="'id_linhahorario_set-' + (index+start_items) + '-novadatainicio'" :name="'linhahorario_set-' + (index+start_items) + '-novadatainicio'" v-model="linha.novadatainicio">
+                    </div>
+                    <div style="flex-basis: 10%;">
+                        <label style="display: block; margin-bottom: 10px;" :for="'id_linhahorario_set-' + (index+start_items) + '-novadiadasemana'">Novo Dia da semana:</label>
+                        <select class="input dropdown-toggle" role="button" style="display: block; width: 100%;" :id="'id_linhahorario_set-' + (index+start_items) + '-novadiadasemana'" :name="'linhahorario_set-' + (index+start_items) + '-novadiadasemana'" v-model="linha.novadiadasemana">
+                            <option style="display: none;" value="default" >Selecionar Opção</option>
+                            <option value="Segunda-Feira">Segunda-Feira</option>
+                            <option value="Terça-Feira">Terça-Feira</option>
+                            <option value="Quarta-Feira">Quarta-Feira</option>
+                            <option value="Quinta-Feira">Quinta-Feira</option>
+                            <option value="Sexta-Feira">Sexta-Feira</option>
+                            <option value="Sabado">Sabado</option>
+                        </select>
+                    </div>
+                    <div style="flex-basis: 25%;">
+                        <label style="margin-bottom: 10px;" :for="'id_linhahorario_set-' + (index+start_items) + '-novadatafim'"> Nova Data Fim:</label>
+                        <input style="margin-bottom: 10px;" class="input" type="date" :id="'id_linhahorario_set-' + (index+start_items) + '-novadatafim'" :name="'linhahorario_set-' + (index+start_items) + '-novadatafim'" v-model="linha.novadatafim">
+                    </div>
+                </div>
+                    <br>
+                </div>
+
+                <button style="margin-bottom: 10px;" type="button" onclick="return confirm('Tem certeza que quer apagar esta linha?')" @click="removeLinha(index)" class="button is-outlined" >Remove</button>
+
+                </select>
+
+            </div>
+            <select for="{{ pedido_form.anoletivo.value|default_if_none:"" }}" name="anoletivo" id="anoletivo" class="button is-outlined">
+                {% for ano in anos %}
+                <option value="{{ ano.id }}">{{ano.ano}}</option>
+                {% endfor %}
+            </select>
+
+            <button type="button" @click="addLinha" class="button is-outlined">Add Linha</button>
+
+            <!-- buttons -->
+            <div style="margin-top:2%;text-align:center;position:center;">
+              <button type="button" value="Voltar" class="button is-outlined" style="margin-right:5%"
+                      onclick="voltar()">Voltar
+              </button>
+              <button type="submit" class="button is-success is-outlined" name="Submit">
+                  <span>Confirmar</span>
+              </button>
+          </div>
+          <!-- buttons -->
+          </form>
+
+        </div>
+
+
+
+
+
+
+        <script>
+          new Vue({
+            el: '#app',
+            data() {
+              return {
+                linhas: [],
+                start_items: 0
+              }
+            },
+            computed: {
+              start: {
+                  get () {
+                      return this.start_items
+                  }
+              }
+            },
+            methods: {
+              addLinha() {
+                console.log(this.linhas)
+                this.linhas.push({
+                id: this.linhas.length + 1,
+                    tipodepedido: 'default',
+                    diadasemana: 'default',
+                    novadiadasemana: 'default',
+                  titulo: '',
+                  descricao: ''
+                });
+              },
+              removeLinha(index) {
+                this.linhas.splice(index, 1);
+              },
+              },
+              mounted() {
+              },
+            },
+          );
+        </script>
+
+  </body>
+
+  </html>
+
+  {% endblock content %}
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function voltar() {
+            location.href = "/pedidoHorario"
+        }
+    </script>
+
+
+}
+{% endblock scripts %}

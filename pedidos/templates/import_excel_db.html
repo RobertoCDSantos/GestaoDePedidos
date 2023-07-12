@@ -1,0 +1,69 @@
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+
+
+{% extends 'app.html' %}
+{% load django_tables2 %}
+{% load static %}
+
+{% block title %}- Consultar Utilizadores
+{% endblock title %}
+
+{% block content %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        setTimeout(function() {
+            $('#mensagem').fadeOut('fast');
+        }, 5000); // Tempo de exibição em milissegundos
+    });
+    </script>
+    {% if mensagem %}
+    <div id="mensagem">
+        <div class="mensagem" style="text-align:center; background-color:{{ colorBack }}; color:{{ color }}; padding:20px; display:block;">
+            <h2>{{ mensagem }}</h2>
+        </div>
+        <br>
+    </div>
+    {% endif %}
+    <div class="columns">
+        <div class="column">
+            <nav aria-label="breadcrumbs" class="breadcrumb">
+                <ul>
+                    <li><a href="{% url 'pedidos:app' %}">Início</a></li>
+                    <li class="is-active"><a href="">Importar DSD</a>
+                    </li>
+                </ul>
+            </nav>
+            <div>
+                <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                <h2>Escolhe os dados para importar:</h2> <br>
+                <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                <div class="col-md-8 col-sm-12 col-xs-12 form-group">
+                </div>
+                    <input type="file" name="myfile" class="form-control" required>
+                    <button type="submit" class="btn btn-success" >Upload File</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        </form>
+        </div>
+    </div>
+{% endblock content %}
+
+<script>
+  $(function() {
+    $("#data_inicio").datepicker();
+    $("#data_fim").datepicker();
+  });
+</script>

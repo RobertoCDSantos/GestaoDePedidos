@@ -1,0 +1,81 @@
+{% extends 'app.html' %}
+
+{% block title %}- Formulario{% endblock title %}
+
+{% block content %}
+{% if mensagem %}
+<div style="text-align:center; background-color:{{ colorBack }}; color:{{ color }}; padding:20px;">
+    <h2>{{ mensagem }}</h2>
+</div>
+<br>
+{% endif %}
+    <div style="padding: 3rem 2vw 1rem;">
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <!-- inside form -->
+            <div style="padding: 1rem 2vw 0px;">
+                <hr>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Ano</label>
+                            <div class="control is-clearfix">
+                                {{ano}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Data Inicio</label>
+                            <div class="control is-clearfix">
+                                <input name="datainicio" id="datainicio" class="input" 
+                                 for="{{ form.datainicio.value|default_if_none:"" }}" type="date" value={{datainicio}}>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Data Fim</label>
+                            <div class="control is-clearfix">
+                                <input name="datafim" id="datafim" class="input" 
+                                 for="{{ form.datafim.value|default_if_none:"" }}" type="date" value={{datafim}}>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <!-- inside form -->
+
+            <!-- buttons -->
+            <div style="margin-top:2%;text-align:center;position:center;">
+                <button type="button" value="Voltar" class="button is-outlined" style="margin-right:5%"
+                        onclick="voltar()">Voltar
+                </button>
+                <button type="submit" class="button is-success is-outlined" name="Submit">
+                    <span>Confirmar</span>
+                </button>
+            </div>
+            <!-- buttons -->
+        </div>
+    </form>
+
+    </div>
+
+{% endblock content %}
+
+
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function voltar() {
+            location.href = "/pedidoOutros"
+        }
+    </script>
+
+
+{% endblock scripts %}

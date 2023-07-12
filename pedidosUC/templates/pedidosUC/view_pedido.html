@@ -1,0 +1,98 @@
+{% extends 'app.html' %}
+{% load static %}
+{% block title %}- Formulario{% endblock title %}
+
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dynamic Inline Formsets with Vue.js CDN</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+      <div id="app">
+
+            <!-- Pedido -->
+            <div style="padding: 1rem 2vw 0px;">
+              <hr>
+              <div class="columns">
+                  <div class="column">
+                      <div class="field">
+                          <label class="label">Título do pedido</label>
+                          <div class="control is-clearfix">
+                              {{pedido.titulo}}
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Descricao do pedido</label>
+                        <div class="control is-clearfix">
+                            {{pedido.descricao}}
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Data alvo</label>
+                        <div class="control is-clearfix">
+                            {{pedido.dataalvo}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+              <hr>
+
+                {% if tipo == 'uc' %}
+                    {% for l in linhas_data %}
+                    <div>
+
+                        <div>
+                        <div style="font-weight: bold;">Observações</div>
+                        <div>{{l.descricao}}</div>
+                    </div>
+
+                    <br>
+
+                    <div>
+                        <div style="font-weight: bold;">Disciplina</div>
+                        <div>
+                            {{l.uc}}
+                        </div>
+                    </div>
+
+                    <hr>
+                    {% endfor %}
+                {% endif %}
+
+
+            
+
+
+        </div>
+
+
+
+
+
+
+
+  </body>
+  </html>
+
+  {% endblock content %}
+
+  {% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function voltar() {
+            location.href = "/pedidoUC"
+        }
+    </script>
+
+
+{% endblock scripts %}

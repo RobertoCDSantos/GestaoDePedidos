@@ -1,0 +1,108 @@
+{% extends 'app.html' %}
+{% load django_tables2 %}
+{% load static %}
+
+{% block title %}- Consultar Utilizadores
+{% endblock title %}
+
+{% block content %}
+{% if mensagem %}
+<div style="text-align:center; background-color:{{ colorBack }}; color:{{ color }}; padding:20px;">
+    <h2>{{ mensagem }}</h2>
+</div>
+<br>
+{% endif %}
+    <div class="columns">
+        <div class="column is-3">
+
+            <div class="menu">
+                <div class="menu-label">
+                    Filtros Pedidos de Sala
+                </div>
+                <form action="{% url 'pedidosSala:index' %}" method="GET">
+                    <ul class="menu-list">
+                        <li>
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    <input class="input" name="pesquisa"
+                                           value="{{ filter.form.nome.value|default_if_none:'' }}" type="text"
+                                           placeholder="Informação">
+                                    <span class="icon is-left">
+                                    <i class="mdi mdi-magnify mdi-24px"></i>
+                                </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label>Tipos:<br>
+                                    <br>
+                                    <input type="checkbox" name="opcao" value="Titulo" {% if 'Titulo' in opcao %}checked{% endif %} > Titulo <br>
+                                    <input type="checkbox" name="opcao" value="Descricao" {% if 'Descricao' in opcao %}checked{% endif %} > Descrição <br>
+                                    <input type="checkbox" name="opcao" value="ID" {% if 'ID' in opcao %}checked{% endif %} > ID <br>
+                                </label>
+                            </div>
+                            <div class="field">
+                                <label for="id_estado">Estado:</label><br>
+                                <select name="id_estado" id="id_estado" class="button is-info">
+                                    <option value="todos" >Todos</option>
+                                    <option value="espera" {% if 'espera' in id_estado %}selected{% endif %}>Espera</option>
+                                    <option value="analise" {% if 'analise' in id_estado %}selected{% endif %}>Análise</option>
+                                    <option value="validado" {% if 'validado' in id_estado %}selected{% endif %}>Validado</option>
+                                    <option value="recusado" {% if 'recusado' in id_estado %}selected{% endif %}>Recusado</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                {% comment %} <label>Tipos: {% endcomment %}
+                                    <br>
+                                    {% comment %} Titulo <input type="checkbox" name="opcao" value="Titulo">
+                                    Descrição <input type="checkbox" name="opcao" value="Descricao">
+                                    Estado <input type="checkbox" name="opcao" value="Estado"> {% endcomment %}
+                                    Ano Letivo<input type="checkbox" name="opcao" value="AnoLetivo">
+                                {% comment %} </label> {% endcomment %}
+                            </div>
+                        </li>
+                        <br>
+                    </ul>
+                    <div class="field is-grouped">
+                        <p class="control is-expanded">
+                            <input class="button is-light is-fullwidth" type="reset"
+                                   onclick="event.preventDefault(); window.location='{% url 'pedidosSala:pedido_sala' %}';"
+                                   value="Limpar">
+                        </p>
+                        <p class="control is-expanded">
+                            <button class="button is-primary is-fullwidth" type="submit">
+                            <span class="icon">
+                                <i class="mdi mdi-magnify"></i>
+                            </span>
+                                <span>Pesquisar</span>
+                            </button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="column">
+            <nav aria-label="breadcrumbs" class="breadcrumb">
+                <ul>
+                    <li><a href="{% url 'pedidos:app' %}">Início</a></li>
+                    <li class="is-active"><a href="">Pedidos de Sala</a>
+                    </li>
+                </ul>
+            </nav>
+            <a href="{% url 'pedidosSala:criar_pedido_sala' %}">
+                <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
+                        class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Criar Pedidos de Sala</span>
+                </button>
+            </a>
+            <!--
+
+            <ul>
+                {% for pedido in pedidos %}
+                    <li>{{ pedido.titulo }} <a href="{% url 'pedidosUC:eliminar_pedido_uc' pedido.id %}">Delete</a> <a href="{% url 'pedidosUC:editar_pedido_uc' pedido.id %}">Edit</a></li>
+                {% endfor %}
+                {% render_table table 'django_tables2/semantic.html' %}
+            </ul> -->
+            {% render_table table %}
+
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,129 @@
+{% extends 'app.html' %}
+{% load django_tables2 %}
+{% load static %}
+
+{% block title %}- Consultar Utilizadores
+{% endblock title %}
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    setTimeout(function() {
+        $('#mensagem').fadeOut('fast');
+    }, 5000); // Tempo de exibição em milissegundos
+});
+</script>
+{% if mensagem %}
+<div id="mensagem">
+    <div class="mensagem" style="text-align:center; background-color:{{ colorBack }}; color:{{ color }}; padding:20px; display:block;">
+        <h2>{{ mensagem }}</h2>
+    </div>
+    <br>
+</div>
+{% endif %}
+    <div class="columns">
+        <div class="column is-3">
+            <div class="menu">
+                <div class="menu-label">
+                    Filtros Pedidos de Disciplina
+                </div>
+                <form action="{% url 'pedidos:pedidos' %}" method="GET">
+                    <ul class="menu-list">
+                        <li>
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    <input class="input" name="pesquisa"
+                                           {% if name %}value="{{name}}"{% else %}value="{{ filter.form.nome.value|default_if_none:'' }}"{% endif %} type="text"
+                                           placeholder="Informação" >
+                                    <span class="icon is-left">
+                                    <i class="mdi mdi-magnify mdi-24px"></i>
+                                </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="field">
+                                <label>Tipos:<br>
+                                    <br>
+                                    <input type="checkbox" name="opcao" value="Titulo" {% if 'Titulo' in opcao %}checked{% endif %} > Titulo <br>
+                                    <input type="checkbox" name="opcao" value="Descricao" {% if 'Descricao' in opcao %}checked{% endif %} > Descrição <br>
+                                    <input type="checkbox" name="opcao" value="ID" {% if 'ID' in opcao %}checked{% endif %} > ID <br>
+                                </label>
+                            </div>
+                            <div class="field">
+                                <label for="id_estado">Estado:</label><br>
+                                <select name="id_estado" id="id_estado" class="button is-info">
+                                    <option value="todos" >Todos</option>
+                                    <option value="espera" {% if 'espera' in id_estado %}selected{% endif %}>Espera</option>
+                                    <option value="analise" {% if 'analise' in id_estado %}selected{% endif %}>Análise</option>
+                                    <option value="validado" {% if 'validado' in id_estado %}selected{% endif %}>Validado</option>
+                                    <option value="recusado" {% if 'recusado' in id_estado %}selected{% endif %}>Recusado</option>
+                                </select>
+                            </div>
+                                <div class="field">
+                                <label for="id_estado">Tipo de Pedido:</label><br>
+                                <select name="tipopedido" id="tipopedido" class="button is-info">
+                                    <option value="todos" >Todos</option>
+                                    <option value="PedidoHorario" {% if 'PedidoHorario' in tipopedido %}selected{% endif %}>Pedido de Horario</option>
+                                    <option value="PedidoSala" {% if 'PedidoSala' in tipopedido %}selected{% endif %}>Pedido de Sala</option>
+                                    <option value="PedidoUC" {% if 'PedidoUC' in tipopedido %}selected{% endif %}>Pedido de UC</option>
+                                    <option value="PedidoOutros" {% if 'PedidoOutros' in tipopedido %}selected{% endif %}>Outros Pedidos</option>
+                                </select>
+                                </div>
+                            </div>
+                            <ul>
+                                {% for value, label in filter.form.fields.groups.choices %}
+                                    <div class="field" style="padding-left: 1rem;">
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="{{ filter.form.groups.name }}"
+                                                   value="{{ value|stringformat:'s' }}"
+                                                   {% if value|stringformat:'s' in filter.form.groups.value %}checked{% endif %}>
+                                            {% if label == "ProfessorUniversitario" %}Professor
+                                                Univesitário{% else %}{{ label }}{% endif %}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="field">
+                                <label>Estados:</label>
+                            </div>
+                            <ul>
+                                {% for value, label in filter.form.fields.valido.choices %}
+                                    <div class="field" style="padding-left: 1rem;">
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="{{ filter.form.valido.name }}"
+                                                   value="{{ value|stringformat:'s' }}"
+                                                   {% if value|stringformat:'s' in filter.form.valido.value %}checked{% endif %}>
+                                            {{ label }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="field is-grouped">
+                        <p class="control is-expanded">
+                            <input class="button is-light is-fullwidth" type="reset"
+                                   onclick="event.preventDefault(); window.location='{% url 'pedidos:pedidos' %}';"
+                                   value="Limpar">
+                        </p>
+                        <p class="control is-expanded">
+                            <button class="button is-primary is-fullwidth" type="submit">
+                            <span class="icon">
+                                <i class="mdi mdi-magnify"></i>
+                            </span>
+                                <span>Pesquisar</span>
+                            </button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="column">
+            {% render_table table %}
+
+        </div>
+    </div>
+{% endblock content %}

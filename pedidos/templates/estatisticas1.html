@@ -1,0 +1,85 @@
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+
+
+{% extends 'app.html' %}
+{% load django_tables2 %}
+{% load static %}
+
+{% block title %}- Consultar Utilizadores
+{% endblock title %}
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+            <script>
+            $(document).ready(function() {
+                setTimeout(function() {
+                    $('#mensagem').fadeOut('fast');
+                }, 5000); // Tempo de exibição em milissegundos
+            });
+            </script>
+            {% if mensagem %}
+            <div id="mensagem">
+                <div class="mensagem" style="text-align:center; background-color:{{ colorBack }}; color:{{ color }}; padding:20px; display:block;">
+                    <h2>{{ mensagem }}</h2>
+                </div>
+                <br>
+            </div>
+            {% endif %}
+    <div class="columns">
+        <div class="column">
+            <nav aria-label="breadcrumbs" class="breadcrumb">
+                <ul>
+                    <li><a href="{% url 'pedidos:app' %}">Início</a></li>
+                    <li class="is-active"><a href="">Estatisticas</a>
+                    </li>
+                </ul>
+            </nav>
+            <div>
+                <div>
+                    <h4 style="text-align:center;"><b style="font-size: 30px;">Estatisticas de pedidos processados</b></h4>
+                    <hr>
+                <form action="{% url 'pedidos:pedidos_processados' %}" method="GET">
+                    {% csrf_token %}
+                    <div class="control is-clearfix">
+                        <label for="id_data_inicio">Data Início:</label>
+                        <input name="data_inicio" id="data_inicio" class="input"
+                               for="{{ form.dataalvo.value|default_if_none:"" }}" type="date">
+                        <label for="id_data_fim">Data Fim:</label>
+                        <input name="data_fim" id="data_fim" class="input"
+                               for="{{ form.dataalvo.value|default_if_none:"" }}" type="date">
+                    </div>
+                    <div class="field">
+                            <br>
+                            <label for="id_estado">Tipo de Pedido:</label>
+                            <select class="button is-outlined" name="tipopedido" id="tipopedido">
+                                <option value="todos" >Todos</option>
+                                <option value="PedidoHorario" {% if 'PedidoHorario' in tipopedido %}selected{% endif %}>Pedido de Horario</option>
+                                <option value="PedidoSala" {% if 'PedidoSala' in tipopedido %}selected{% endif %}>Pedido de Sala</option>
+                                <option value="PedidoUC" {% if 'PedidoUC' in tipopedido %}selected{% endif %}>Pedido de UC</option>
+                                <option value="PedidoOutros" {% if 'PedidoOutros' in tipopedido %}selected{% endif %}>Outros Pedidos</option>
+                            </select>
+                    </div>
+                        <button class="button is-outlined" type="submit">Mostrar</button>
+
+                    </form>
+                {% if image_data %}
+                    <img src="data:image/png;base64,{{ image_data }}" />
+                {% else %}
+                    <p style="font-size: 30px;">Sem informação por enquanto.</p>
+                {% endif %}
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+<script>
+  $(function() {
+    $("#data_inicio").datepicker();
+    $("#data_fim").datepicker();
+  });
+</script>

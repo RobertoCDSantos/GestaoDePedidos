@@ -1,0 +1,20 @@
+{% extends 'app.html' %}
+{% load django_tables2 %}
+{% load static %}
+
+{% block title %}- Consultar Utilizadores
+{% endblock title %}
+
+{% block content %}
+{% if mensagem %}
+<div style="text-align:center; background-color:{{ colorBack }}; color:{{ color }}; padding:20px;">
+    <h2>{{ mensagem }}</h2>
+</div>
+<br>
+{% endif %}
+    <div class="columns">
+        <div class="column">
+            {% render_table table %}
+        </div>
+    </div>
+{% endblock content %}

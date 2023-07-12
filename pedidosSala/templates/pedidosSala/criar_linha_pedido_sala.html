@@ -1,0 +1,71 @@
+{% extends 'app.html' %}
+
+{% block title %}- Formulario{% endblock title %}
+
+{% block content %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        <!-- inside form  
+        {{ form.management_form }}
+        {% for f in form %}
+            {{ f }}
+            <hr>
+        {% endfor %}
+        <input type="Submit" name="Submit" value="Submit"/>
+        --> 
+    </form>
+        
+    <form action="" method="POST">
+        {% csrf_token %}
+        <!-- inside form -->
+        <div style="padding: 1rem 2vw 0px;">
+            <hr>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <div class="control is-clearfix">
+                            <label class="label">Título</label>
+                            <input name="titulo" id="titulo" class="input"
+                            for="{{ form.titulo.value|default_if_none:"" }}" type="text" maxlength="255">
+                        </div>
+                        <br>
+                        <div class="control is-clearfix">
+                            <label class="label">Descrição</label>
+                            <textarea for="{{ form.descricao.value|default_if_none:"" }}" style="resize: none;" rows="4" cols="50" name="descricao" id="descricao" class="textarea"> </textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!-- inside form -->
+
+            <!-- buttons -->
+            <div style="margin-top:2%;text-align:center;position:center;">
+                <button type="button" value="Voltar" class="button is-outlined" style="margin-right:5%"
+                        onclick="voltar()">Voltar
+                </button>
+                <button type="submit" class="button is-success is-outlined" name="Submit">
+                    <span>Confirmar</span>
+                </button>
+            </div>
+            <!-- buttons -->
+        </div>
+    </form>
+
+    </div>
+
+{% endblock content %}
+
+
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function voltar() {
+            location.href = "/pedidoOutros"
+        }
+    </script>
+
+
+}
+{% endblock scripts %}
